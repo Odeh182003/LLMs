@@ -1,0 +1,39 @@
+[
+  {
+    "id": "invoice-001",
+    "input": "Invoice 2837 from Example Trading, dated 12 September 2026. Total: 4,820.00.",
+    "expected": {
+      "document_type": "invoice",
+      "document_number": "2837",
+      "organization": "Example Trading",
+      "document_date": "2026-09-12",
+      "currency": null,
+      "total": 4820.0
+    }
+  },
+  {
+    "id": "invoice-002",
+    "input": "NORTH STAR SUPPLIES — INV-A19 — 3 August 2026 — USD 1,250.75",
+    "expected": {
+      "document_type": "invoice",
+      "document_number": "INV-A19",
+      "organization": "NORTH STAR SUPPLIES",
+      "document_date": "2026-08-03",
+      "currency": "USD",
+      "total": 1250.75
+    }
+  },
+  {
+    "id": "missing-date-001",
+    "input": "Invoice B-42 from Example Services. Total: EUR 99.00. The date is not shown.",
+    "expected": {
+      "document_type": "invoice",
+      "document_number": "B-42",
+      "organization": "Example Services",
+      "document_date": null,
+      "currency": "EUR",
+      "total": 99.0
+    }
+  }
+]
+

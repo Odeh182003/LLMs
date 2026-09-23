@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Practice invoice for LLM exercise</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 48px; color: #182230; }
+    main { max-width: 760px; margin: auto; border: 1px solid #aeb7c2; padding: 40px; }
+    header { display: flex; justify-content: space-between; border-bottom: 2px solid #334155; }
+    table { width: 100%; border-collapse: collapse; margin-top: 32px; }
+    th, td { border-bottom: 1px solid #cbd5e1; padding: 12px; text-align: left; }
+    .number { text-align: right; }
+    .total { margin-top: 24px; text-align: right; font-size: 1.25rem; font-weight: bold; }
+    .notice { margin-top: 36px; color: #64748b; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div><h1>INVOICE</h1><p>Example Trading Company</p></div>
+      <div><p><strong>No:</strong> INV-2026-104</p><p><strong>Date:</strong> 18 September 2026</p></div>
+    </header>
+    <p><strong>Bill to:</strong> Sample Customer Ltd.</p>
+    <table>
+      <thead><tr><th>Description</th><th class="number">Quantity</th><th class="number">Amount</th></tr></thead>
+      <tbody>
+        <tr><td>Document processing service</td><td class="number">12</td><td class="number">SAR 1,800.00</td></tr>
+        <tr><td>Integration support</td><td class="number">2</td><td class="number">SAR 500.00</td></tr>
+      </tbody>
+    </table>
+    <p class="total">Total: SAR 2,300.00</p>
+  </main>
+</body>
+</html>

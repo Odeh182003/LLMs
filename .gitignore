@@ -1,0 +1,33 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# JavaScript / TypeScript
+node_modules/
+dist/
+coverage/
+
+# Java / .NET
+target/
+bin/
+obj/
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Local output
+output/
+logs/
+*.log
+

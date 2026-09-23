@@ -1,0 +1,19 @@
+{
+  "shipments": {
+    "SHP-1001": {
+      "status": "in_transit",
+      "origin": "Riyadh",
+      "destination": "Dammam"
+    },
+    "SHP-1002": {
+      "status": "delivered",
+      "origin": "Jeddah",
+      "destination": "Riyadh"
+    }
+  },
+  "exchange_rates": {
+    "USD_SAR": 3.75,
+    "EUR_SAR": 4.10
+  }
+}
+
