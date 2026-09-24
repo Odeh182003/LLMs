@@ -52,6 +52,10 @@ shipment_lookup_tools = {
     }
 }
 try:
+#Make a request to the model (with the tools it could call) 
+# with the user input and the system prompt.
+#The model will decide whether to call the lookup_shipment tool based on 
+# the shipment ID provided by the user.
     response = client.chat.completions.create(
         model=model_name,
         messages=message,
@@ -69,8 +73,11 @@ try:
         print(f"\n[AI Agent requested tool call: {response_message.tool_calls[0].function.name}]")
         function_args = json.loads(response_message.tool_calls[0].function.arguments)
         shipment_id = function_args.get("shipment_id")
+# Tool Call: The model has requested to call the lookup_shipment tool with the provided
+#  shipment ID.
         tool_response = lookup_shipment(shipment_id)
         print(f"\n[Tool Response: {tool_response}]")
+#Make a second request to the model with the tool response included in the conversation history.
         message.append({"role": "assistant", "content": response_message.content, "tool_calls": response_message.tool_calls})
         message.append({"role": "function", "name": response_message.tool_calls[0].function.name, "content": json.dumps(tool_response)})
         follow_up_response = client.chat.completions.create(
@@ -78,6 +85,8 @@ try:
             messages=message,
             max_tokens=150
         )
+#Recieve the final response from the model after it has processed 
+# the tool response and generated a complete answer for the user.
         print("\n[Final Response from the model: ]")
         print(follow_up_response.choices[0].message.content)
 

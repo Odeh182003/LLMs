@@ -24,6 +24,7 @@ message = [
     {"role": "user", "content": input_text}
 ]
 try:
+#API call to the model to get the response based on the input text and the system prompt.
     response = client.chat.completions.create(
         model=model_name,
         messages=message,

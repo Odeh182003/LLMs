@@ -44,7 +44,7 @@ message = [
             "When a user asks a question, first check the available files using list_file. "
             "Then, use read_file to check files that might contain the answer. "
             "If the information is NOT in the files, you must state clearly that you do not know "
-            "and never hallucinate answers."
+            "and never invent answers."
         )
     },
     {"role": "user", "content": user_input}
@@ -71,10 +71,11 @@ tools = [
     }
 },
 {
-"type": "function",
+"type": "function",# Type always has to be "function" for tool calls. 
+#It tells the model that this is a tool it can call.
     "function":{
-    "name": "list_file",
-    "description": "List all files in the shared/files directory.",
+    "name": "list_file", # the functions name is what the model will use to call the tool.
+    "description": "List all files in the shared/files directory.",#details on when &how to use the tool.
     "parameters": {
         "type": "object",
         "properties": {}
@@ -84,9 +85,13 @@ tools = [
     "function": {
     "name": "read_file",
     "description": "Read the content of a specified file in the shared/files directory.",
+#WE put "strict": true, exactly here
+#Setting strict to true will ensure function calls reliably adhere to the function schema, instead of being best effort.
+
     "parameters": {
         "type": "object",
-        "properties": {
+        "properties": {#JSON Schema properties for the tool's input parameters. 
+            #The model will use this to know what arguments to provide when calling the tool.
             "file_name": {
                 "type": "string",
                 "description": "The name of the file to read."
@@ -99,21 +104,26 @@ tools = [
 
 ]   
 try:
-    response = client.chat.completions.create(
-        model=model_name,
-        messages=message,
-        tools=tools,
-        tool_choice="auto",
-        max_tokens=300
-    )
-    response_message = response.choices[0].message
-
-    if response_message.tool_calls:
+    while True:
+        response = client.chat.completions.create(
+            model=model_name,
+            messages=message,
+            tools=tools,
+            tool_choice="auto",#call 0, 1, or more tools based on the user input. 
+#The model will decide which tool to call based on the user input and the system prompt.
+            max_tokens=300
+        )
+        response_message = response.choices[0].message
+        if not response_message.tool_calls:
+            print("\n[Final Response from the model: ]")
+            print(response_message.content)
+            break
         message.append(response_message)
+
         for tool_call in response_message.tool_calls:
             tool_name = tool_call.function.name
             function_args = json.loads(tool_call.function.arguments)
-            print(f"\n[AI Agent requested tool call: {tool_name}]")
+            print(f"\n[AI Agent requested tool call: {tool_name} with arguments: {function_args}]")
             if tool_name == "lookup_shipment":
                 shipment_id = function_args.get("shipment_id")
                 tool_response = lookup_shipment(shipment_id)
@@ -126,12 +136,6 @@ try:
                 tool_response = {"error": "Unknown tool requested."}
             print(f"\n[Tool Response: {tool_response}]")
             message.append({"role": "tool","tool_call_id": tool_call.id, "name": tool_name, "content": json.dumps(tool_response)})
-            follow_up_response = client.chat.completions.create(
-                model=model_name,
-                messages=message,
-                max_tokens=300
-            )
-            print("\n[Final Response from the model: ]")
-            print(follow_up_response.choices[0].message.content)
+            
 except Exception as e:
     print(f"An error occurred: {e}")
